@@ -44,7 +44,7 @@ class TestIndex(unittest.TestCase):
 
 
 class TestFeed(unittest.TestCase):
-    def test_feed_is_wellformed_unsigned_atom(self):
+    def test_feed_author_is_literal_blog(self):
         contents = {"older": "<p>x &amp; y</p>", "newer": "<p>z</p>"}
         out = bi.build_feed(bi.sort_posts(list(POSTS)), contents)
         root = ET.fromstring(out)
