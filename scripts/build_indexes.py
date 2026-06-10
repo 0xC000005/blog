@@ -37,7 +37,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
 <input type="submit" value="Search">
 </form>
 <small>
-<a href="feed.xml">feed</a><br>
+<a href="../">Home</a> &middot; <a href="feed.xml">feed</a><br>
 Last updated: {updated}
 <!-- goatcounter: enabled later, after signup
 <img src="https://FIXME-CODE.goatcounter.com/counter/TOTAL.png" alt="">

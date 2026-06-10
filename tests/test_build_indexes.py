@@ -42,6 +42,10 @@ class TestIndex(unittest.TestCase):
         self.assertIn("A one-liner.", out)
         self.assertIn("<h1>Blog</h1>", out)
 
+    def test_index_links_home(self):
+        out = bi.build_index([dict(POSTS[0])])
+        self.assertIn('href="../"', out)
+
 
 class TestFeed(unittest.TestCase):
     def test_feed_author_is_literal_blog(self):
