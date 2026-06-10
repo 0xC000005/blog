@@ -1,5 +1,7 @@
 /* Local additions on top of latex.css: classic link colors, math font,
    scroll-don't-bleed for wide content, comments container. */
+:root { color-scheme: light; }
+
 a { color: #0000EE; }
 a:visited { color: #551A8B; }
 
@@ -7,6 +9,7 @@ a:visited { color: #551A8B; }
   font-family: "Latin Modern Math";
   src: local("Latin Modern Math"),
        url("./fonts/latinmodern-math.woff2") format("woff2");
+  font-display: swap;
 }
 math {
   font-family: "Latin Modern Math", "Cambria Math", math;
