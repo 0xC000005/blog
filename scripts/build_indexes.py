@@ -117,6 +117,8 @@ def extract_content(slug, site_dir=SITE_DIR):
             f"content-start and one content-end marker (found {starts}/{ends})"
         )
     m = re.search(r"<!-- content-start -->(.*?)<!-- content-end -->", page, re.S)
+    if not m:
+        sys.exit(f"error: {site_dir}/{slug}.html content markers are malformed or out of order")
     return m.group(1).strip()
 
 

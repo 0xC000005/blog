@@ -111,6 +111,13 @@ class TestExtractContent(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 bi.extract_content("x", Path(tmp))
 
+    def test_reversed_markers_exit_cleanly(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "x.html").write_text(
+                "<!-- content-end -->x<!-- content-start -->", encoding="utf-8")
+            with self.assertRaises(SystemExit):
+                bi.extract_content("x", Path(tmp))
+
     def test_extracts_between_markers(self):
         with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "x.html").write_text(
