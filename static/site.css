@@ -1,0 +1,25 @@
+/* Local additions on top of latex.css: classic link colors, math font,
+   scroll-don't-bleed for wide content, comments container. */
+a { color: #0000EE; }
+a:visited { color: #551A8B; }
+
+@font-face {
+  font-family: "Latin Modern Math";
+  src: local("Latin Modern Math"),
+       url("./fonts/latinmodern-math.woff2") format("woff2");
+}
+math {
+  font-family: "Latin Modern Math", "Cambria Math", math;
+  font-feature-settings: "dtls" off;
+}
+math[display="block"] {
+  display: block math;
+  overflow-x: auto;
+  max-width: 100%;
+  padding: 0.5em 1px;
+}
+
+pre { overflow-x: auto; }
+
+.giscus { margin-top: 3em; }
+.giscus-frame { width: 100%; border: 0; }

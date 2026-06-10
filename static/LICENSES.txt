@@ -1,0 +1,6 @@
+latex.css (static/latex.css) — MIT License, (c) Vincent Doerig
+  https://github.com/vincentdoerig/latex-css
+
+Latin Modern fonts (static/fonts/LM-*.woff2, latinmodern-math.woff2) —
+  GUST Font License, (c) the GUST e-foundry
+  http://www.gust.org.pl/projects/e-foundry/latin-modern

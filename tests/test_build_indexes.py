@@ -154,6 +154,11 @@ class TestAuthorField(unittest.TestCase):
         out = bi.build_index([dict(POSTS[0])])
         self.assertIn("Reposted articles carry their original authors", out)
 
+    def test_index_links_stylesheets(self):
+        out = bi.build_index([dict(POSTS[0])])
+        self.assertIn('href="static/latex.css"', out)
+        self.assertIn('href="static/site.css"', out)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -9,3 +9,4 @@ metadata:
   link-citations: true
 html-math-method:
   method: mathml
+highlight-style: monochrome
