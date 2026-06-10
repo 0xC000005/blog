@@ -26,7 +26,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
 </head>
 <body>
 <h1>Blog</h1>
-<p>Notes and reposts. Reposted articles carry their original authors' names; views are the authors' own.</p>
+<p align="center"><i>Notes and reposts. Reposted articles carry their original authors' names; views are the authors' own.</i></p>
 <ul>
 {items}
 </ul>
