@@ -24,6 +24,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
 </head>
 <body>
 <h1>Blog</h1>
+<p>Notes and reposts. Reposted articles carry their original authors' names; views are the authors' own.</p>
 <ul>
 {items}
 </ul>
@@ -60,7 +61,7 @@ ENTRY_TEMPLATE = """  <entry>
     <title>{title}</title>
     <link href="{url}"/>
     <id>{url}</id>
-    <updated>{date}T00:00:00Z</updated>
+    <updated>{date}T00:00:00Z</updated>{author}
     <content type="html">{content}</content>
   </entry>"""
 
@@ -103,6 +104,7 @@ def load_posts(posts_dir=POSTS_DIR):
             "title": meta["title"],
             "date": meta["date"],
             "description": meta.get("description", ""),
+            "author": meta.get("author", ""),
         })
     return sort_posts(posts)
 
@@ -125,10 +127,11 @@ def extract_content(slug, site_dir=SITE_DIR):
 def build_index(posts):
     items = []
     for p in posts:
+        author = f" ({html.escape(p.get('author', ''))})" if p.get("author") else ""
         desc = f" &mdash; {html.escape(p['description'])}" if p["description"] else ""
         items.append(
             f'<li>{p["date"]} &mdash; '
-            f'<a href="{p["slug"]}.html">{html.escape(p["title"])}</a>{desc}</li>'
+            f'<a href="{p["slug"]}.html">{html.escape(p["title"])}</a>{author}{desc}</li>'
         )
     updated = posts[0]["date"] if posts else "n/a"
     return INDEX_TEMPLATE.format(items="\n".join(items), updated=updated)
@@ -140,6 +143,10 @@ def build_feed(posts, contents):
             title=html.escape(p["title"]),
             url=f"{SITE_URL}/{p['slug']}.html",
             date=p["date"],
+            author=(
+                f"\n    <author><name>{html.escape(p.get('author', ''))}</name></author>"
+                if p.get("author") else ""
+            ),
             content=html.escape(contents[p["slug"]]),
         )
         for p in posts

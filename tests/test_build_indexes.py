@@ -126,5 +126,34 @@ class TestExtractContent(unittest.TestCase):
             self.assertEqual(bi.extract_content("x", Path(tmp)), "<p>Hi</p>")
 
 
+class TestAuthorField(unittest.TestCase):
+    REPOST = {"slug": "repost", "title": "Borrowed", "date": "2026-03-01",
+              "description": "", "author": "Jane Q. Author"}
+
+    def test_index_shows_repost_author(self):
+        out = bi.build_index(bi.sort_posts([dict(POSTS[0]), dict(self.REPOST)]))
+        self.assertIn("(Jane Q. Author)", out)
+
+    def test_index_omits_author_when_absent(self):
+        out = bi.build_index([dict(POSTS[0])])
+        self.assertNotIn("()", out)
+
+    def test_feed_entry_author_only_for_reposts(self):
+        posts = bi.sort_posts([dict(POSTS[0]), dict(self.REPOST)])
+        contents = {"older": "<p>a</p>", "repost": "<p>b</p>"}
+        out = bi.build_feed(posts, contents)
+        root = ET.fromstring(out)
+        ns = "{http://www.w3.org/2005/Atom}"
+        by_id = {e.find(f"{ns}id").text: e for e in root.findall(f"{ns}entry")}
+        repost_entry = by_id["https://0xC000005.github.io/blog/repost.html"]
+        older_entry = by_id["https://0xC000005.github.io/blog/older.html"]
+        self.assertEqual(repost_entry.find(f"{ns}author/{ns}name").text, "Jane Q. Author")
+        self.assertIsNone(older_entry.find(f"{ns}author"))
+
+    def test_index_has_neutral_description_line(self):
+        out = bi.build_index([dict(POSTS[0])])
+        self.assertIn("Reposted articles carry their original authors", out)
+
+
 if __name__ == "__main__":
     unittest.main()
