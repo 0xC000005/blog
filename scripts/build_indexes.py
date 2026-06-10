@@ -3,6 +3,7 @@
 
 Stdlib only. Front matter is a flat YAML subset: `key: value` string pairs.
 """
+import datetime
 import html
 import re
 import sys
@@ -86,11 +87,17 @@ def load_posts(posts_dir=POSTS_DIR):
     posts = []
     for path in sorted(posts_dir.glob("*.md")):
         meta = parse_front_matter(path.read_text(encoding="utf-8"))
+        if not re.fullmatch(r"[A-Za-z0-9._-]+", path.stem):
+            sys.exit(f"error: {path} filename must be a URL-safe slug ([A-Za-z0-9._-])")
         for required in ("title", "date"):
-            if required not in meta:
+            if not meta.get(required, "").strip():
                 sys.exit(f"error: {path} front matter is missing '{required}'")
         if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", meta["date"]):
             sys.exit(f"error: {path} date must be YYYY-MM-DD")
+        try:
+            datetime.date.fromisoformat(meta["date"])
+        except ValueError:
+            sys.exit(f"error: {path} date is not a real calendar date")
         posts.append({
             "slug": path.stem,
             "title": meta["title"],
@@ -102,9 +109,14 @@ def load_posts(posts_dir=POSTS_DIR):
 
 def extract_content(slug, site_dir=SITE_DIR):
     page = (site_dir / f"{slug}.html").read_text(encoding="utf-8")
+    starts = page.count("<!-- content-start -->")
+    ends = page.count("<!-- content-end -->")
+    if starts != 1 or ends != 1:
+        sys.exit(
+            f"error: {site_dir}/{slug}.html must contain exactly one "
+            f"content-start and one content-end marker (found {starts}/{ends})"
+        )
     m = re.search(r"<!-- content-start -->(.*?)<!-- content-end -->", page, re.S)
-    if not m:
-        sys.exit(f"error: {site_dir}/{slug}.html lacks content markers")
     return m.group(1).strip()
 
 

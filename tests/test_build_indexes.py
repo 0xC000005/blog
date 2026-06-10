@@ -1,4 +1,5 @@
 import sys
+import tempfile
 import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -54,6 +55,68 @@ class TestFeed(unittest.TestCase):
         self.assertEqual(len(entries), 2)
         self.assertIn("<p>x &amp; y</p>", entries[1].find(f"{ns}content").text)
         self.assertTrue(entries[0].find(f"{ns}id").text.endswith("/newer.html"))
+
+
+class TestLoadPostsValidation(unittest.TestCase):
+    def _write(self, tmp, name, text):
+        p = Path(tmp) / name
+        p.write_text(text, encoding="utf-8")
+        return p
+
+    def test_missing_title_exits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write(tmp, "a.md", "---\ndate: 2026-06-10\n---\n")
+            with self.assertRaises(SystemExit):
+                bi.load_posts(Path(tmp))
+
+    def test_empty_title_exits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write(tmp, "a.md", "---\ntitle:\ndate: 2026-06-10\n---\n")
+            with self.assertRaises(SystemExit):
+                bi.load_posts(Path(tmp))
+
+    def test_impossible_date_exits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write(tmp, "a.md", "---\ntitle: A\ndate: 2026-13-99\n---\n")
+            with self.assertRaises(SystemExit):
+                bi.load_posts(Path(tmp))
+
+    def test_bad_slug_exits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write(tmp, "bad slug.md", "---\ntitle: A\ndate: 2026-06-10\n---\n")
+            with self.assertRaises(SystemExit):
+                bi.load_posts(Path(tmp))
+
+    def test_drafts_subdir_ignored(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "drafts").mkdir()
+            self._write(tmp, "ok.md", "---\ntitle: A\ndate: 2026-06-10\n---\n")
+            self._write(tmp, "drafts/d.md", "---\ntitle: D\ndate: 2026-06-10\n---\n")
+            posts = bi.load_posts(Path(tmp))
+            self.assertEqual([p["slug"] for p in posts], ["ok"])
+
+
+class TestExtractContent(unittest.TestCase):
+    def test_missing_markers_exits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "x.html").write_text("<html>no markers</html>", encoding="utf-8")
+            with self.assertRaises(SystemExit):
+                bi.extract_content("x", Path(tmp))
+
+    def test_duplicate_end_marker_exits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "x.html").write_text(
+                "<!-- content-start -->a<!-- content-end -->b<!-- content-end -->",
+                encoding="utf-8")
+            with self.assertRaises(SystemExit):
+                bi.extract_content("x", Path(tmp))
+
+    def test_extracts_between_markers(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "x.html").write_text(
+                "<head/><!-- content-start -->\n<p>Hi</p>\n<!-- content-end --><small/>",
+                encoding="utf-8")
+            self.assertEqual(bi.extract_content("x", Path(tmp)), "<p>Hi</p>")
 
 
 if __name__ == "__main__":
