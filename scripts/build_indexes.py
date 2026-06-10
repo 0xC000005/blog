@@ -21,8 +21,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Blog</title>
 <link rel="alternate" type="application/atom+xml" href="feed.xml" title="Blog">
-<link rel="stylesheet" href="static/latex.css">
-<link rel="stylesheet" href="static/site.css">
+<link rel="stylesheet" href="static/style.css">
 </head>
 <body>
 <h1>Blog</h1>

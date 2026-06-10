@@ -1,0 +1,98 @@
+/* ==================================================================
+   style.css — the entire stylesheet for the blog. No JS.
+   Numbers per Butterick (practicaltypography.com): 45-90 chars/line,
+   line-height 120-145%, body 15-25px. Tables: LaTeX booktabs look,
+   after gregorygundersen.com. Scroll-don't-bleed: after gwern.net.
+   ================================================================== */
+
+/* Plain white — no dark mode. */
+:root { color-scheme: light; }
+
+/* ---- Measure ----
+   Keep the default serif, just bigger. 36em @ 18px ~ 75 chars of
+   Times — inside Butterick's 45-90. */
+body {
+  font-family: serif;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  max-width: 36em;
+  margin: 0 auto;
+  padding: 0 1em 4em;
+}
+h1, h2, h3 { line-height: 1.25; }
+
+/* ---- Tables (pandoc: table > colgroup, thead, tbody) ----
+   Booktabs: heavy top/bottom rule, light rule under the header, no
+   vertical lines. Wide tables get their own scrollbar instead of
+   bleeding off-screen. */
+table {
+  border-collapse: collapse;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  margin: 1.5em auto;
+  font-size: 0.9em;
+  line-height: 1.4;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+}
+th, td  { padding: 0.25em 0.75em; vertical-align: top; }
+thead tr:last-child th { border-bottom: 1px solid; }
+caption { caption-side: bottom; font-style: italic; padding: 0.3em; }
+
+/* ---- Code ----
+   'monospace, monospace' stops browsers shrinking mono to 13px.
+   Long lines scroll, never wrap. */
+pre, code { font-family: monospace, monospace; font-size: 0.85em; }
+pre code  { font-size: 100%; }
+pre {
+  overflow-x: auto;
+  padding: 0.7em 1em;
+  border: 1px solid;
+  line-height: 1.45;
+  tab-size: 4;
+}
+
+/* ---- Math (pandoc --mathml) ----
+   A self-hosted math font fixes Chromium-without-math-fonts (esp.
+   Linux): stretchy fences, radicals, script placement. local() first
+   so anyone who has it downloads nothing. Wide display equations
+   scroll inside the column. */
+@font-face {
+  font-family: "STIX Two Math";
+  src: local("STIX Two Math"), local("STIXTwoMath"),
+       url("fonts/STIXTwoMath-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+math {
+  font-family: "Cambria Math", "STIX Two Math", math;
+  font-feature-settings: "dtls" off;
+}
+math[display="block"] {
+  display: block math;
+  overflow-x: auto;
+  max-width: 100%;
+  padding: 0.5em 1px;
+}
+
+/* ---- Everything else ---- */
+img, svg, video { max-width: 100%; height: auto; }
+figure     { margin: 1.5em 0; text-align: center; }
+figcaption { font-size: 0.9em; font-style: italic; }
+
+blockquote { margin: 1em 0 1em 0.25em; padding-left: 1em;
+             border-left: 2px solid; }
+
+/* Footnotes (pandoc emits its own <hr> above them) and citeproc
+   bibliography (#refs with .csl-entry divs). */
+section.footnotes, #refs { font-size: 0.9em; }
+a.footnote-ref { text-decoration: none; }
+sub, sup { line-height: 0; }
+.csl-entry { margin-bottom: 0.5em; }
+.hanging-indent .csl-entry { margin-left: 2em; text-indent: -2em; }
+
+/* Comments: giscus injects an iframe into the .giscus container —
+   the single permitted piece of JS. */
+.giscus       { margin-top: 3em; }
+.giscus-frame { width: 100%; border: 0; }
