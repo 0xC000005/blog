@@ -156,8 +156,8 @@ class TestAuthorField(unittest.TestCase):
 
     def test_index_links_stylesheets(self):
         out = bi.build_index([dict(POSTS[0])])
-        self.assertIn('href="static/style.css"', out)
-        self.assertNotIn("latex.css", out)
+        self.assertIn('href="static/latex.css"', out)
+        self.assertIn('href="static/site.css"', out)
 
 
 if __name__ == "__main__":
