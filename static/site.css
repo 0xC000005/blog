@@ -26,3 +26,12 @@ pre { overflow-x: auto; }
 
 .giscus { margin-top: 3em; }
 .giscus-frame { width: 100%; border: 0; }
+
+/* Plain look: default white background and default serif (overrides
+   latex.css's tinted background and Latin Modern text webfont — with
+   no element referencing 'Latin Modern', those fonts never download;
+   math keeps Latin Modern Math via the rule above). */
+body {
+  background-color: #fff;
+  font-family: serif;
+}
