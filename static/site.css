@@ -47,3 +47,13 @@ body {
 :lang(zh-Hans) {
   font-family: "Noto Serif SC Subset", "Songti SC", "Noto Serif CJK SC", SimSun, serif;
 }
+
+/* Wider measure for list-heavy pages; prose pages keep latex.css's 80ch. */
+body.wide { max-width: 110ch; hyphens: manual; }
+body.wide td:first-child, body.wide td:last-child { white-space: nowrap; }
+@media (max-width: 700px) {
+  body.wide table, body.wide tbody, body.wide tr, body.wide td { display: block; }
+  body.wide td { padding: 0 0.5rem; line-height: 1.4; white-space: normal; }
+  body.wide td:empty { display: none; }
+  body.wide tr { margin: 0.6rem 0; }
+}
