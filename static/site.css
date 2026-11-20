@@ -35,3 +35,15 @@ body {
   background-color: #fff;
   font-family: serif;
 }
+
+/* Chinese text: a three-glyph subset of Noto Serif SC, so it matches the
+   serif body on machines with no serif Chinese font. */
+@font-face {
+  font-family: "Noto Serif SC Subset";
+  src: url("./fonts/NotoSerifSC-name.woff2") format("woff2");
+  unicode-range: U+5F20, U+7ECF, U+7EAC;
+  font-display: swap;
+}
+:lang(zh-Hans) {
+  font-family: "Noto Serif SC Subset", "Songti SC", "Noto Serif CJK SC", SimSun, serif;
+}

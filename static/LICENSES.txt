@@ -4,3 +4,8 @@ latex.css (static/latex.css) — MIT License, (c) Vincent Doerig
 Latin Modern fonts (static/fonts/LM-*.woff2, latinmodern-math.woff2) —
   GUST Font License, (c) the GUST e-foundry
   http://www.gust.org.pl/projects/e-foundry/latin-modern
+
+Noto Serif SC (static/fonts/NotoSerifSC-name.woff2, three-glyph subset) —
+  SIL Open Font License 1.1, (c) Adobe and Google
+  Full licence text: static/fonts/NotoSerifSC-OFL.txt
+  https://github.com/notofonts/noto-cjk
